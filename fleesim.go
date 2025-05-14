@@ -97,10 +97,10 @@ func (s *Simulator) Execute(ctx context.Context) (*Result, error) {
 	results := make(chan Result, s.workers)
 	runs := s.runs / s.workers
 
-	errgroup, ctx := errgroup.WithContext(ctx)
+	errgroup, gctx := errgroup.WithContext(ctx)
 	for range s.workers {
 		errgroup.Go(func() error {
-			return s.execWorker(ctx, runs, results)
+			return s.execWorker(gctx, runs, results)
 		})
 	}
 
